@@ -1,0 +1,13 @@
+from pyrogram import Client, filters
+
+api_id = 27394279
+api_hash = "90a9aa4c31afa3750da5fd686c410851"
+session_string = "BAGiAOcAB8WY9pYkmMJjCTDtpgbV-sTu-Wf2cpigDzD8G6Lzwtx3qmp9eX223iRmNah33yzmGM-9ythu7CkAE4raFl3BfbQRP0qHMRtSoLZOCV9nc4kB1B8l7hhm2auPc0hOKd_zxxY_NYNlRUCa5ot_6seMZ8L5vMXdyVtO4KySHuSC8kXwFcOXTZ5_ARRxHIiA63Y_5mSmhLn549xkHHNjx_lvyhHeuW5pkFlVF7LbxMzz4YTRXcgLFZqU069ZPZeWizc1LS9xOg-v_XDzOmHukcx5knSV4cLUZApBTghKv7UF9fzD1x6CfoU0kROAAREkdqSAhC51D3GQP-hF5NE7MMDCcQAAAAGhB5QIAA"
+
+app = Client("my_bot", api_id=api_id, api_hash=api_hash, session_string=session_string)
+
+@app.on_message(filters.command("start") & filters.private)
+async def start(client, message):
+    await message.reply_text("Salam! Render se bot 24/7 active hai.")
+
+app.run()

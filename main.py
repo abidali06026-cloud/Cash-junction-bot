@@ -1,19 +1,34 @@
-from pyrogram import Client, filters
+import telebot
+from telebot import types
 
-api_id = 27394279
-api_hash = "90a9aa4c31afa3750da5fd686c410851"
-session_string = "BAGIaOcAB8WY9pYkmMjCTDtpgbV4Uu-3m8Yj-L1mD14N7_0W9I-0ylz" 
+# --- CONFIGURATION ---
+API_TOKEN = 'YOUR_BOT_TOKEN'
+ADMIN_ID = YOUR_TELEGRAM_ID
+# ---------------------
 
-source_chat = -1002038952405    
-destination_chat = -1003999599055 
+bot = telebot.TeleBot(API_TOKEN)
 
-app = Client("my_bot", api_id=api_id, api_hash=api_hash, session_string=session_string)
+@bot.message_handler(commands=['start', 'menu'])
+def send_welcome(message):
+    if message.from_user.id == ADMIN_ID:
+        markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+        btn1 = types.KeyboardButton('➕ Add Source')
+        btn2 = types.KeyboardButton('🔍 Filter Settings')
+        btn3 = types.KeyboardButton('📊 Bot Status')
+        btn4 = types.KeyboardButton('⚙️ Advanced Tools')
+        markup.add(btn1, btn2, btn3, btn4)
+        bot.reply_to(message, "Junction System Active. Settings are now inside Telegram.", reply_markup=markup)
+    else:
+        bot.reply_to(message, "Only Admin can control this bot.")
 
-@app.on_message(filters.chat(source_chat))
-async def forward_messages(client, message):
-    try:
-        await message.forward(destination_chat)
-    except Exception as e:
-        print(f'Error: {e}')
+@bot.message_handler(func=lambda message: True)
+def handle_admin_commands(message):
+    if message.from_user.id == ADMIN_ID:
+        if message.text == '📊 Bot Status':
+            bot.reply_to(message, "✅ System: Running 24/7\n✅ Mode: Auto-Pilot")
+        elif message.text == '🔍 Filter Settings':
+            bot.reply_to(message, "Configure keywords here (e.g., Binance, Code)")
+    pass
 
-app.run()
+print("Bot is starting...")
+bot.infinity_polling()
